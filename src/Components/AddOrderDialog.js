@@ -11,7 +11,14 @@ import {
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { collection, onSnapshot, addDoc, serverTimestamp, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../Database/firebase";
 
 const AddOrderDialog = () => {
@@ -63,7 +70,9 @@ const AddOrderDialog = () => {
 
   const handleAddProduct = () => {
     if (newProduct && newQuantity) {
-      const productToAdd = products.find((product) => product.name === newProduct);
+      const productToAdd = products.find(
+        (product) => product.name === newProduct
+      );
       if (productToAdd) {
         if (productToAdd.quantity >= parseInt(newQuantity, 10)) {
           const item = {
@@ -73,7 +82,8 @@ const AddOrderDialog = () => {
           setOrderItems([...orderItems, item]);
 
           // Update the product quantity in the database after selling
-          const updatedQuantity = productToAdd.quantity - parseInt(newQuantity, 10);
+          const updatedQuantity =
+            productToAdd.quantity - parseInt(newQuantity, 10);
           const productRef = doc(db, "products", productToAdd.id);
           updateDoc(productRef, { quantity: updatedQuantity })
             .then(() => {
@@ -184,7 +194,11 @@ const AddOrderDialog = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleCreateOrder} variant="contained" color="primary">
+          <Button
+            onClick={handleCreateOrder}
+            variant="contained"
+            color="primary"
+          >
             Create Order
           </Button>
         </DialogActions>

@@ -1,7 +1,8 @@
 import { RouterProvider,createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Home from './Pages/home';
-import DashBoard from './Components/SideBar';
+
+import DashBoard from './Pages/dashboard';
 import SideBar from './Components/SideBar';
 import Customer from './Pages/Customer';
 import Signup from './Pages/Signup';

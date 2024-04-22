@@ -22,17 +22,17 @@ const SideBar = () => {
     {
       name: "Customer",
       icon: PersonOutlinedIcon,
-      link: "/home/dashboard",
+      link: "/home/customers",
     },
     {
       name: "Order",
       icon: ShoppingCartOutlinedIcon,
-      link: "/home/dashboard",
+      link: "/home/orders",
     },
     {
       name: "Invoice",
       icon: DescriptionOutlinedIcon,
-      link: "/home/dashboard",
+      link: "/home/invoice",
     },
   ];
   const [active, setActive] = useState(0);
