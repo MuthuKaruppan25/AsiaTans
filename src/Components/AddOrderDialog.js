@@ -69,19 +69,23 @@ const AddOrderDialog = () => {
   }, []);
 
   const handleAddProduct = () => {
+    console.log(newProduct);
     if (newProduct && newQuantity) {
+     
       const productToAdd = products.find(
-        (product) => product.name === newProduct
+        (product) => product.name === newProduct.name
       );
+  
       if (productToAdd) {
+        console.log(1);
+        console.log(productToAdd);
         if (productToAdd.quantity >= parseInt(newQuantity, 10)) {
           const item = {
             product: productToAdd,
             quantity: parseInt(newQuantity, 10),
           };
           setOrderItems([...orderItems, item]);
-
-          // Update the product quantity in the database after selling
+          console.log(2);
           const updatedQuantity =
             productToAdd.quantity - parseInt(newQuantity, 10);
           const productRef = doc(db, "products", productToAdd.id);
@@ -112,6 +116,7 @@ const AddOrderDialog = () => {
             productName: item.product.name,
             quantity: item.quantity,
             totalCost: item.quantity * item.product.cost,
+            cost : item.product.cost
           })),
           createdAt: serverTimestamp(),
         };
@@ -168,7 +173,7 @@ const AddOrderDialog = () => {
               getOptionLabel={(product) => product.name}
               style={{ marginTop: "8px", marginBottom: "8px" }}
               value={newProduct}
-              onChange={(event, newValue) => setNewProduct(newValue)}
+              onChange={(event, newValue) => setNewProduct(newValue)} // Update state with selected value
               renderInput={(params) => <TextField {...params} label="Select" />}
             />
             <span className="mt-4 mb-3">Quantity</span>

@@ -81,7 +81,8 @@ const AddProductDialog = () => {
           quantity: quantity,
           cost: cost,
           price: price,
-          image: url,
+          image: downloadURL,
+          timeStamp : Date.now()
         });
         const id = docref.id;
         await updateDoc(docref, { id: id });
