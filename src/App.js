@@ -12,11 +12,11 @@ import Invoice from './Pages/invoice';
 function App() {
   const AppRouter = createBrowserRouter([
     {
-      path:'/',
+      path:'/signup',
       element:<Signup/>
     },
     {
-      path:'/home',
+      path:'/',
       element:<Home/>,
       children:[
         {

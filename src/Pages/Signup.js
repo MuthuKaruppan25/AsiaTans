@@ -15,7 +15,7 @@ const Signup = () => {
     onSuccess: (tokenResponse) => {
       const {access_token} = tokenResponse;
       localStorage.setItem("tokenId",access_token);
-      navigate("/home",);
+      navigate("/",);
     },
   });
   const handleSubmit= ()=>{
@@ -24,7 +24,7 @@ const Signup = () => {
       const err={}
       if(email === "muthukaruppanaakash76@gmail.com" && Password=="Mk_muthu_25")
         {
-          navigate('/home');
+          navigate('/');
         }
         else{
           err.t = "Email or Password is incorrect";

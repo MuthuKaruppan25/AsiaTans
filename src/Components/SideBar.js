@@ -7,38 +7,44 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import Logo from "../Assets/TANS.png";
 import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const SideBar = () => {
+  const navigate = useNavigate();
   const navLinks = [
     {
       name: "DashBoard",
       icon: SpaceDashboardOutlinedIcon,
-      link: "/home/dashboard",
+      link: "/dashboard",
     },
     {
       name: "Products",
       icon: ShoppingBagOutlinedIcon,
-      link: "/home/products",
+      link: "/products",
     },
     {
       name: "Customer",
       icon: PersonOutlinedIcon,
-      link: "/home/customers",
+      link: "/customers",
     },
     {
       name: "Order",
       icon: ShoppingCartOutlinedIcon,
-      link: "/home/orders",
+      link: "/orders",
     },
     {
       name: "Invoice",
       icon: DescriptionOutlinedIcon,
-      link: "/home/invoice",
+      link: "/invoice",
     },
   ];
+  const handleclick=()=>{
+      localStorage.removeItem("tokenId");
+      navigate('/signup');
+  }
   const [active, setActive] = useState(0);
   return (
     <div className="flex">
-      <div className="px-10 py-3 flex flex-col r w-30 h-screen border border-r-1 ">
+      <div className="px-10 py-3 flex flex-col r w-30 h-screen border border-r-1  ">
         <div className="logo-div flex space-x-2 items-center">
           <img src={Logo} className="w-17 h-[50px]" />
           <span className="text-3xl font-bold ">Tans</span>
@@ -62,6 +68,9 @@ const SideBar = () => {
             );
           })}
         </div>
+        <button className="mt-[230px] p-2 rounded-lg bg-slate-500 text-white font-semibold" onClick={handleclick}>
+           Logout
+        </button>
       </div>
     </div>
   );
