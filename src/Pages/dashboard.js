@@ -14,13 +14,15 @@ import {
 import { PieChart } from "@mui/x-charts";
 import { useEffect } from "react";
 import { db } from "../Database/firebase";
-import { onSnapshot, collection,query,where,getDocs } from "firebase/firestore";
+import { onSnapshot, collection,query,where,getDocs ,orderBy,limit} from "firebase/firestore";
 const DashBoard = () => {
   const [revenue, setRevenue] = useState(0);
   const [customer, setCustomer] = useState(0);
   const [products, setProducts] = useState(0);
   const [spendings, setSpendings] = useState(0);
   const [data2, setData2] = useState([]);
+  const [product,setProduct] = useState([]);
+  const [product1,setproduct1] = useState([]);
   useEffect(() => {
     const fetchData = () => {
       const coll = collection(db, "products");
@@ -74,7 +76,7 @@ const DashBoard = () => {
       const unsubscribe = onSnapshot(coll2, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const order = doc.data();
-          totalSpendings +=parseInt (order.cost);
+          totalSpendings +=parseInt (order.cost) * parseInt(order.quantity);
         });
 
         setSpendings(totalSpendings);
@@ -116,12 +118,45 @@ const DashBoard = () => {
 
       setData2(formattedData);
     };
+    const fetchData6 = () => {
+      const coll = collection(db, "products");
+      const q = query(coll, orderBy("count", "desc"), limit(3)); 
 
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const updatedProducts = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProduct(updatedProducts);
+     
+      });
+    
+
+      return () => unsubscribe();
+    };
+    const fetchData7 = ()=>{
+      const coll = collection(db, "products");
+      const q = query(coll, orderBy("totalRevenue", "desc"), limit(3)); 
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const updatedProducts = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setproduct1(updatedProducts);
+     
+      });
+    
+
+      return () => unsubscribe();
+    }
     fetchData();
     fetchData1();
     fetchData3();
     fetchData4();
     fetchData5();
+    fetchData6();
+    fetchData7();
   }, []);
   const data = [
     { name: "A", value: 2 },
@@ -267,13 +302,22 @@ const DashBoard = () => {
             Sales by category
           </span>
           <PieChart
+            // series={[
+            //   {
+            //     data: [
+            //       { id: 0, value: product[0]["count"], label: product[0]["name"]},
+            //       { id: 1, value: product[1]["count"], label: product[1]["name"]},
+            //       { id: 2, value: product[2]["count"], label: product[2]["name"]},
+            //     ],
+            //   },
+            // ]}
             series={[
               {
-                data: [
-                  { id: 0, value: 10, label: "series A" },
-                  { id: 1, value: 15, label: "series B" },
-                  { id: 2, value: 20, label: "series C" },
-                ],
+                data: product.slice(0, 3).map((item, index) => ({
+                  id: index,
+                  value: item.count,
+                  label: item.name,
+                })),
               },
             ]}
             width={340}
@@ -281,6 +325,7 @@ const DashBoard = () => {
           />
         </div>
       </div>
+      <div className="flex">
       <div className="shadow-md border w-[60%] mt-3 ml-5 rounded-2xl">
         <div className="flex flex-col">
           <span className="text-slate-500 font-semibold p-4">
@@ -304,6 +349,38 @@ const DashBoard = () => {
           <Bar dataKey="value" fill="#8884d8" />
         </BarChart>
       </div>
+      <div className="mt-4 shadow-md p-2 mr-2 border rounded-2xl ml-3 items-center flex flex-col h-[350px]">
+          <span className="text-slate-500 font-semibold mb-5 ml-0">
+            Sales by Amount
+          </span>
+          <PieChart
+            // series={[
+            //   {
+            //     data: [
+            //       { id: 0, value: product[0]["count"], label: product[0]["name"]},
+            //       { id: 1, value: product[1]["count"], label: product[1]["name"]},
+            //       { id: 2, value: product[2]["count"], label: product[2]["name"]},
+            //     ],
+            //   },
+            // ]}
+            series={[
+              {
+                data: product1.slice(0, 3).map((item, index) => ({
+                  id: index,
+                  value: item.count,
+                  label: item.name,
+                })),
+              },
+            ]}
+            width={340}
+            height={200}
+          />
+        </div>
+      
+      </div>
+
+      
+      
     </div>
   );
 };

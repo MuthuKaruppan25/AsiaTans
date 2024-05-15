@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const [email,setEmail] = useState("");
   const [Password,setPassword] = useState("");
+  const [formerrors, setformerrors] = useState({});
+  const [inc,setInc] = useState({});
   const navigate = useNavigate();
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
@@ -17,29 +19,26 @@ const Signup = () => {
     },
   });
   const handleSubmit= ()=>{
-    const data={
-      email:email,
-      password:Password
-    }
-    fetch("http://192.168.235.166:8000/booking/getBookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    setformerrors(validate(email,Password));
+    if(email && Password){
+      const err={}
+      if(email === "muthukaruppanaakash76@gmail.com" && Password=="Mk_muthu_25")
+        {
+          navigate('/home');
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("")
-      })
-      .catch((error) => {
-        console.error("Error booking ticket:", error);
-      });
+        else{
+          err.t = "Email or Password is incorrect";
+        }
+    }
+  }
+  const errors = {}
+  const validate=(email,Password)=>{
+    if(!email){
+      errors.email = "Email is required";
+    }
+    if(!Password){
+      errors.Password = "Password is required";
+    }
   }
   return (
     <div className="flex">
@@ -59,6 +58,7 @@ const Signup = () => {
               className="w-full outline-none border-none h-full"
               onChange={(e)=>setEmail(e.target.value)}
             />
+            <p className=" text-red-500">{formerrors.email}</p>
           </div>
           <div className="border p-2 w-[470px] mt-5 h-[50px] items-center rounded-md border-gray-400">
             <input
@@ -67,6 +67,7 @@ const Signup = () => {
               className="w-full outline-none border-none h-full"
               onChange={(e)=>setPassword(e.target.value)}
             />
+            <p className=" text-red-500">{formerrors.Password}</p>
           </div>
           <button className="pl-[205px] pr-[205px] pt-2 pb-2 bg-blue-500 rounded-lg mt-8 shadow-md" onClick={handleSubmit}>
             <span className="text-white text-semibold text-[20px]">Submit</span>
@@ -78,6 +79,7 @@ const Signup = () => {
           >
             <img src={google} alt="GOOGLE" className="w-[30px] h-[30px]" />
           </button>
+          <p className=" text-red-500">{inc.t}</p>
         </div>
       </div>
     </div>

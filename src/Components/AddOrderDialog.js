@@ -88,8 +88,10 @@ const AddOrderDialog = () => {
           console.log(2);
           const updatedQuantity =
             productToAdd.quantity - parseInt(newQuantity, 10);
+          const upcount = productToAdd.count + 1;
+          const rev = parseInt(newQuantity,10) * parseInt(productToAdd.price);
           const productRef = doc(db, "products", productToAdd.id);
-          updateDoc(productRef, { quantity: updatedQuantity })
+          updateDoc(productRef, { quantity: updatedQuantity ,count : upcount,totalRevenue: rev})
             .then(() => {
               console.log("Product quantity updated successfully");
             })
@@ -119,6 +121,7 @@ const AddOrderDialog = () => {
             cost : item.product.cost
           })),
           createdAt: serverTimestamp(),
+          status : 0,
         };
         const docRef = await addDoc(collection(db, "Orders"), orderData);
         console.log("Order created with ID: ", docRef.id);

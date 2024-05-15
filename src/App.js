@@ -8,6 +8,7 @@ import Customer from './Pages/Customer';
 import Signup from './Pages/Signup';
 import Products from './Pages/Products';
 import Orders from './Pages/Orders';
+import Invoice from './Pages/invoice';
 function App() {
   const AppRouter = createBrowserRouter([
     {
@@ -33,7 +34,12 @@ function App() {
         {
           path:'orders',
           element:<Orders/>
+        },
+        {
+          path:'invoice',
+          element: <Invoice/>
         }
+
       ]
     }
   ]);
